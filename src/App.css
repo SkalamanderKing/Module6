@@ -38,6 +38,7 @@ border-color: transparent !important;*/
 background:rgba(0,0,0,0.5);
 border-color: transparent !important;
 }
+
 .navbar-nav > li > a {padding-top:5px !important; padding-bottom:5px !important;}
 .navbar {min-height:32px !important}
 
