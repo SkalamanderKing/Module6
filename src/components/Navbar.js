@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "./Link";
-
+import Modal from "./Modal";
 export default function Navbar() {
   return (
+    <div>
     <nav className="navbar navbar-inverse navbar-fixed-top">
       <div className="container-fluid">
         <div className="navbar-header">
@@ -19,22 +20,25 @@ export default function Navbar() {
         </div>
         <div className="collapse navbar-collapse" id="bar">
           <ul className="nav navbar-nav navbar-right">
-            <li>
+          {/* <button type="button" className="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Small Modal</button> */}
+            {/* <li>
               <Link to="games.html" title="Games" />
             </li>
             <li>
               <Link to="test.html" title="About" />
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Link
-                to="test.htm"
+                to="#"
                 data-toggle="modal"
                 data-target="#myModal"
                 title="Sign in"
               />
-            </li>
+            </li> */}
+            	<li><a href="#" data-toggle="modal" data-target="#myModal">Sign in</a></li>
           </ul>
-          <form className="navbar-form navbar-left">
+
+          {/* <form className="navbar-form navbar-left">
             <div className="form-group">
               <input
                 type="email"
@@ -52,9 +56,13 @@ export default function Navbar() {
             <button type="submit" className="btn btn-warning btn-sm">
               Submit
             </button>
-          </form>
+          </form> */}
         </div>
       </div>
+
     </nav>
+<Modal />
+
+     </div>
   );
 }

@@ -10,6 +10,8 @@ import firebase from '../firebase';
  * get double updates. We only need the listeners to make the change
  */
 
+
+
 export function addTodo(todo){
   return function(dispatch){
     firebase.database().ref(`todos`).push(todo)
@@ -40,6 +42,7 @@ export function editTodo(todo){
       text: todo.text,
       //completed: todo.completed,
       //number:todo.number,
+      postNo: todo.postNo,
       createdBy:todo.createdBy
     })
     .catch(error => {
@@ -141,6 +144,8 @@ export function userChanged() {
     });
   };
 }
+
+
 // export function getIdOfUser(users){
 //   return function (dispatch){
 //     firebase.auth().onAuthStateChanged((users) => {

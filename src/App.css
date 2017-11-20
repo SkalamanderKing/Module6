@@ -150,19 +150,52 @@ padding-left: 80px;
 }
 
 #myButt{
-font-size: 38px;
+font-size: 12px;
 background-color: #4CAF50;
 color: white;
-padding: 15px 32px;
+padding: 8px 20px;
 text-align: center;
 text-decoration: none;
 display: inline-block;
-margin: 4px 2px;
-cursor: pointer;
-width: 300px;
+width: auto;
 cursor: pointer;
 }
-
+#myButt2{
+  font-size: 12px;
+  background-color: rgb(175, 76, 76);
+  color: white;
+  padding: 8px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  width: auto;
+  cursor: pointer;
+  }
+  #myButt3{
+    font-size: 12px;
+    background-color: rgb(247, 243, 29);
+    color: rgb(8, 0, 0);
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: auto;
+    cursor: pointer;
+    }
+    .radio-button{
+      font-size: 14px;
+      color: black;
+    }
+    button {
+      background-color: Transparent;
+      background-repeat:no-repeat;
+      border: none;
+      cursor:pointer;
+      overflow: hidden;
+      outline:none;
+  }
+.button:hover{background-image:none !important;
+  background-color:hsl(0, 100%, 50%) !important;}
 /*media queries, the size of the text changes depending of screen*/
 @media only screen and (max-width: 700px) {
 
@@ -212,3 +245,4 @@ margin-top:0px;
   }
 
 }
+

@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators }from 'redux';
-import * as actions from '../actions/actions';
-import '../App.css';
-import Jumbotron from './Jumbotron';
-import Footer from './Footer';
-import Container from './Container';
-//import Navbar from './Navbar';
-import firebase from '../firebase';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as actions from "../actions/actions";
+import "../App.css";
+import Jumbotron from "./Jumbotron";
+import Footer from "./Footer";
+import Container from "./Container";
+import Navbar from "./Navbar";
+import firebase from "../firebase";
+import Input from "./Input";
+//import Modal from "./Modal";
+import ToggleCheckbox from "./ToggleCheckbox";
 /* Good news, the logic in the component is basically the same!
  * It is the actions that need updating! We are creating our own API in our actions :)
  */
@@ -22,6 +25,9 @@ class App extends Component {
     // user:undefined,
     loggedIn: undefined,
     //number: 1
+    value: "",
+    signInOrUp: true,
+    
   };
 
   componentDidMount() {
@@ -42,18 +48,18 @@ class App extends Component {
     this.props.removeUserListener();
   }
 
-  add = () => {
-
+  add = e => {
+    //console.log(e.target.id);
     //No need for the random ID, just send these values
     this.props.addTodo({
       text: this.state.value,
-     // completed: false,
-     //number: this.state.number,
+      // completed: false,
+      postNo: e.target.id,
       createdBy: this.state.userUid
     });
     this.setState({ value: "" });
+    // this.refs.someName.value = '';
   };
-
 
   getIdOfUser = () => {
     firebase.auth().onAuthStateChanged(users => {
@@ -65,7 +71,6 @@ class App extends Component {
   };
 
   getValueofUser = id => {
-
     if (id !== undefined) {
       var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
       firebaseRef.once("value").then(dataSnapshot => {
@@ -143,7 +148,7 @@ class App extends Component {
       });
   };
 
-  signIn = (e) => {
+  signIn = e => {
     e.preventDefault();
     firebase
       .auth()
@@ -156,81 +161,89 @@ class App extends Component {
       .auth()
       .signOut()
       .then(window.location.reload());
-      // .then(
-      //   this.setState({
-      //     text: "",
-      //     email: "",
-      //     password: "",
-      //     userUid: undefined,
-      //     isAdmin: "",
-
-      //     loggedIn: false
-      //   })
-      // ).then(this.location.reload());
   };
 
+  setOption = (event) => {
+
+    if(this.state.signInOrUp)
+    this.setState({ signInOrUp: false })
+    else
+    this.setState({ signInOrUp: true })
+  }
+
   render() {
-    //console.log("admin? " +this.state.isAdmin);
-    //Both state and our functions are stored in props, redux state is synced to props
-   // var todoList2 = "";
-    //var todoList3 = "";
-
-  
-
-
-
-
-/*
-    const todoList = this.props.todos.map(todo => (
-      <div key={todo.key}>
-        <p>{todo.text}</p>
-      </div>
-    ));
-*/
-    /*funkar men tar bort anv efter inloggning, kanske hide ist?*/
+    
     const userList = this.props.user.map((user, k) => {
       if (this.state.isAdmin && user !== "") {
         return (
           <div key={k}>
-            {user.email }
-          {console.log(user)}
+            {user.email}
+            {/* {console.log(user)} */}
             <button className="button2" onClick={() => this.removeUser(user)}>
               Remove User
             </button>
-            <button className="button" onClick={() => this.toggleCompleted(user)}>
-          {" "}
-          Admin  
-        </button> {user.isAdmin.toString()}
+            <button
+              className="button"
+              onClick={() => this.toggleCompleted(user)}
+            >
+              {" "}
+              Admin
+            </button>{" "}
+            {user.isAdmin.toString()}
           </div>
         );
       } else return <div key={k}> </div>;
     });
-    let todoList =undefined;
-    let todoList2=undefined;
-var nummer=1;
-var nummer2=2,
-    if(nummer===1){
-  todoList = this.props.todos.map((todo, k) => {
-     // if(this.state.number===1)
-      if (todo.createdBy === this.state.userUid || this.state.isAdmin) {
+
+    const todoList = this.props.todos.map((todo, k) => {
+      <ListItem key={todo.toString()}
+      value={todo} />
+      if (
+        todo.postNo === "3" &&
+        (todo.createdBy === this.state.userUid || this.state.isAdmin)
+      ) {
         return (
           <div key={k}>
-            {todo.text }
-        
+            {todo.text}
+            {/* {console.log(todo.postNo)} */}
             <button className="button" onClick={() => this.remove(todo)}>
-              Remove todo
-              </button>
-              <button className="button" onClick={() => this.edit(todo)}>
-                {" "}
-                Edit Todo{" "}
-              </button>
+              X
+            </button>
+            <button className="button" onClick={() => this.edit(todo)}>
+              {" "}
+              Edit{" "}
+            </button>
           </div>
         );
-      } else return <div key={k}>{todo.text} </div>;
+      } else if (todo.postNo === "3") return <div key={k}>{todo.text} </div>;
     });
-  }
 
-  //TODO fixa inlägg 2,3 etc (kanske med nr på todos (eg inlägg)?)
+    const todoList2 = this.props.todos.map((todo, k) => {
+      // if(this.state.number===1)
+
+      //  if (todo.createdBy === this.state.userUid || this.state.isAdmin)
+      if (
+        todo.postNo === "2" &&
+        (todo.createdBy === this.state.userUid || this.state.isAdmin)
+      ) {
+        return (
+          <div key={k}>
+            {todo.text}
+            {/* {console.log(todo.postNo)} */}
+            <button className="button" onClick={() => this.remove(todo)}>
+              X
+            </button>
+            <button className="button" onClick={() => this.edit(todo)}>
+              {" "}
+              Edit{" "}
+            </button>
+          </div>
+        );
+      } else if (todo.postNo === "2") return <div key={k}>{todo.text} </div>;
+    });
+    //}
+
+    //TODO fixa inlägg 2,3 etc (kanske med nr på todos (eg inlägg)?)
 
     // const todoList2 = this.props.todos.map((todo, k) => {
     // //  if(this.state.number===2)
@@ -238,7 +251,7 @@ var nummer2=2,
     //     return (
     //       <div key={k}>
     //         {todo.text }
-        
+
     //         <button className="button" onClick={() => this.remove(todo)}>
     //           Remove todo
     //           </button>
@@ -251,7 +264,7 @@ var nummer2=2,
     //   } else return <div key={k}>{todo.text} </div>;
     // });
 
-/*
+    /*
     if (this.state.userUid !== undefined) {
       todoList2 = this.props.todos.map(
         function(todo) {
@@ -274,9 +287,7 @@ var nummer2=2,
     }
 */
 
-
-
-/*
+    /*
     if (this.state.userUid !== undefined) {
       todoList3 = this.props.todos.map(
         function(todo) {
@@ -294,49 +305,46 @@ var nummer2=2,
       );
     }
 */
-   
 
-    return (
-      <div className="App">
-        {/* {this.state.user && this.state.user.email} */}
-        {/* <Navbar /> */}
-        {/* userEmail */}
-   
-        {/* {this.state.email} */}
-        {!this.state.loggedIn && 
-        <form onSubmit={this.register}>
-          <input
-            type="text"
-            name="email"
-            placeholder="email"
-            onChange={this.onChange}
-            value={this.state.email}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="password"
-            onChange={this.onChange}
-            value={this.state.password}
-          />
-          <input className="button" type="submit" value="Register" />
-        </form>
-}
 
-     
-    
+    return <div className="App">
+        {/* <Navbar></Navbar> */}
 
-{!this.state.loggedIn && 
-        <button className="button" onClick={this.signIn}>
-          {" "}
-          logga in{" "}
-        </button>}
+  
+
+        {this.state.signInOrUp && !this.state.loggedIn && <form onSubmit={this.signIn}>
+        <div className="form-inline">
+              <Input onChange={this.onChange} value={this.state.name} />
+          
+              <input className="button" id="myButt" type="submit" value="Sign In" /> </div>
+            </form>}
+
+        {!this.state.signInOrUp && !this.state.loggedIn && <form onSubmit={this.register}>
+        <div className="form-inline"> <Input onChange={this.onChange} value={this.state.name} />
         
-        {this.state.loggedIn && <p>{this.state.email}
-        <button className="button" onClick={this.signOut}>
-          {" "}
-          Logga ut{" "}
-        </button> </p>  }
+              <input className="button" id="myButt2" type="submit" value="Register" /></div>
+            </form>}
+
+        {this.state.loggedIn && <p>
+            {this.state.email}
+            <button className="button" id="myButt3" onClick={this.signOut}>
+              {" "}
+              Log out{" "}
+            </button>{" "}
+          </p>}
+
+          {!this.state.loggedIn && <div onClick={event => this.setOption(event)}>
+            <label className="radio-button">
+              {" "}
+              <input type="radio" value="SignIn" defaultChecked name="signInOrUp" />
+              Sign In    {" "}
+            </label>
+            <label className="radio-button">
+              {" "}
+              <input type="radio" value="Register" name="signInOrUp" />
+              Register     {" "}
+            </label>
+          </div>}
         <Jumbotron />
         {/* <button className="button" onClick={this.getValueofUser}>
           hämta
@@ -347,23 +355,16 @@ var nummer2=2,
           <div className="row">
             <figure className="col-xs-4">
               <p className="mqtx">Birdy</p>
-              <img
-                id="bild"
-                src={require("./birdy3D.png")}
-                className="img-rounded"
-                alt="Birdy2"
-                width="384"
-                height="384"
-              />
+              <img id="bild" src={require("./birdy3D.png")} className="img-rounded" alt="Birdy2" width="384" height="384" />
             </figure>
             <main>
-              <h3>Hello, on this site you will find some cool games! </h3>
+              <h3>Lorem! Ipsum dolor sit amet, consectetur adipiscing elit. </h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-                nisl ipsum, luctus rutrum tellus vel, mollis fringilla mauris.
-                Nullam sagittis tristique arcu, vel euismod urna elementum ac.
-                Fusce in tortor ac mauris elementum porttitor. Interdum et
-                malesuada fames ac ante ipsum primis in
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Duis nisl ipsum, luctus rutrum tellus vel, mollis fringilla
+                mauris. Nullam sagittis tristique arcu, vel euismod urna
+                elementum ac. Fusce in tortor ac mauris elementum porttitor.
+                Interdum et malesuada fames ac ante ipsum primis in
               </p>
               <form>
                 <div className="form-group">
@@ -379,54 +380,40 @@ var nummer2=2,
 
         <Container>
           {this.props.error}
+
+          <textarea placeholder="Din kommentar (logga in först!)" type="text" onChange={this.onChange} name="value" value={this.state.value} ref="someName" className="form-control" rows="3" id="comment" style={{ textAlign: "left", borderStyle: "solid", margin: "auto", border: "3px solid #73AD21", padding: "10px", backgroundColor: "lightblue" }} />
+          <p />
+          {this.state.loggedIn && <button type="submit" id="3" className="btn btn-success" onClick={this.add}>
+              Skicka kommentar
+            </button>}
+          <p />
+          <div className="chat" style={{ textAlign: "left", borderStyle: "solid", margin: "auto", width: "60%", border: "3px solid #73AD21", padding: "10px", backgroundColor: "lightblue" }}>
+            {todoList}
+          </div>
+        </Container>
+
+        <Container>
+          {this.props.error}
           {/* {yyy}{" hej"} */}
 
           {/* <input type="text" onChange={this.onChange} name="value" value={this.state.value} />
         <button className="button" onClick={this.add}> Add Todo </button> */}
-          <textarea
-            placeholder="Din kommentar (logga in först!)"
-            type="text"
-            onChange={this.onChange}
-            name="value"
-            value={this.state.value}
-            className="form-control"
-            rows="10"
-            id="comment"
-            style={{
-              textAlign: "left",
-              borderStyle: "solid",
-              margin: "auto",
-              border: "3px solid #73AD21",
-              padding: "10px",
-              backgroundColor: "lightblue"
-            }}
-          />
+          <textarea placeholder="Din kommentar (logga in först!)" type="text" onChange={this.onChange} name="value" value={this.state.value} ref="someName" className="form-control" rows="3" id="comment" style={{ textAlign: "left", borderStyle: "solid", margin: "auto", border: "3px solid #73AD21", padding: "10px", backgroundColor: "lightblue" }} />
           <p />
-          {this.state.loggedIn && 
-          <button type="submit" className="btn btn-success" onClick={this.add}>
-            Skicka kommentar
-          </button>}
-          <p /> 
-          <div
-            className="chat"
-            style={{
-              textAlign: "left",
-              borderStyle: "solid",
-              margin: "auto",
-              width: "60%",
-              border: "3px solid #73AD21",
-              padding: "10px",
-              backgroundColor: "lightblue"
-            }}
-          >
-            {todoList}
-           {/* {this.state.value}   {todoList2} */}
+          {this.state.loggedIn && <button type="submit" id="2" className="btn btn-success" onClick={this.add}>
+              Skicka kommentar
+            </button>}
+          <p />
+          <div className="chat" style={{ textAlign: "left", borderStyle: "solid", margin: "auto", width: "60%", border: "3px solid #73AD21", padding: "10px", backgroundColor: "lightblue" }}>
+            {todoList2}
+
+            {/* {this.state.value}   {todoList2} */}
             {/* {chatCon} * {petList}*  {yyy}*/}
           </div>
         </Container>
+
         <Footer />
-      </div>
-    );
+      </div>;
   }
 }
 /*
@@ -443,20 +430,41 @@ function isAdmin(obj){
   
   }
 */
-function mapDispatchToProps(dispatch){
-  return bindActionCreators(actions, dispatch)    
+
+ function List({ arrayOfItems }) {
+  return (
+    <ul>
+      { arrayOfItems.map( item =>
+          <li key={ item.id }>{ item.name }</li>
+      )}
+    </ul>
+  );
 }
 
 
-function mapStateToProps(state){
+function TodosList(props) {
+
+
+
+
+}
+
+function ListItem(props) {
+  return <p>{props.value}</p>;
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(actions, dispatch);
+}
+
+function mapStateToProps(state) {
   return {
     todos: state.todos,
     error: state.error,
     user: state.user
-  }
+  };
 }
 
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
