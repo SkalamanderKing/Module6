@@ -11,6 +11,7 @@ import firebase from "../firebase";
 import Input from "./Input";
 //import Modal from "./Modal";
 import ToggleCheckbox from "./ToggleCheckbox";
+import Uservalue from "./Uservalue";
 /* Good news, the logic in the component is basically the same!
  * It is the actions that need updating! We are creating our own API in our actions :)
  */
@@ -175,29 +176,56 @@ class App extends Component {
     
     const userList = this.props.user.map((user, k) => {
       if (this.state.isAdmin && user !== "") {
-        return (
-          <div key={k}>
-            {user.email}
-            {/* {console.log(user)} */}
-            <button className="button2" onClick={() => this.removeUser(user)}>
-              Remove User
-            </button>
-            <button
-              className="button"
-              onClick={() => this.toggleCompleted(user)}
-            >
-              {" "}
-              Admin
-            </button>{" "}
-            {user.isAdmin.toString()}
-          </div>
-        );
+        return <div key={k}>
+            <Uservalue value={user.email} title="Remove" onClick={() => this.removeUser(user)} />
+            <Uservalue value={user.isAdmin} title="Admin" onClick={() => this.toggleCompleted(user)} />
+          </div>;
       } else return <div key={k}> </div>;
     });
 
+    
+    // const userList = this.props.user.map((user, k) => {
+    //   if (this.state.isAdmin && user !== "") {
+    //     return (
+    //       <div key={k}>
+    //         {/*<div key={k}> {user.email} */}
+    //         <UserToRemove {...user} 
+    //         onClick={() => this.removeUser(user)}  />
+      
+    //         <UserIsAdmin  value={user.isAdmin}
+    //         onClick={() => this.toggleCompleted(user)}  
+            
+    //         />
+    //       </div>
+    //     );
+    //   } else return <div key={k}> </div>;
+    // });
+    // const userList = this.props.user.map((user, k) => {
+    //   if (this.state.isAdmin && user !== "") {
+    //     return (
+    //       <div key={k}>
+    //         {user.email}
+       
+    //         {/* {console.log(user)} */}
+    //         <button className="button2" onClick={() => this.removeUser(user)}>
+    //           Remove User
+    //         </button>
+    //         <button
+    //           className="button"
+    //           onClick={() => this.toggleCompleted(user)}
+    //         >
+    //           {" "}
+    //           Admin
+    //         </button>{" "}
+    //         {user.isAdmin.toString()}
+    //       </div>
+    //     );
+    //   } else return <div key={k}> </div>;
+    // });
+
     const todoList = this.props.todos.map((todo, k) => {
-      <ListItem key={todo.toString()}
-      value={todo} />
+      // <ListItem key={todo.toString()}
+      // value={todo} />
       if (
         todo.postNo === "3" &&
         (todo.createdBy === this.state.userUid || this.state.isAdmin)
@@ -429,7 +457,7 @@ function isAdmin(obj){
     return hejsan;
   
   }
-*/
+
 
  function List({ arrayOfItems }) {
   return (
@@ -444,10 +472,41 @@ function isAdmin(obj){
 
 function TodosList(props) {
 
-
-
-
 }
+*/
+
+
+
+function UserToRemove(props) {
+  return <div><p>{props.email}
+       <button onClick={() => props.onClick(props)}>
+              Remove User
+            </button></p>
+  </div>;
+}
+
+function UserIsAdmin(props) {
+  return <div><p>
+       <button onClick={() => props.onClick(props)}>
+              Admin
+            </button>{props.value.toString()}
+            </p>
+  </div>;
+}
+
+// function UserItem(props) {
+//   return <div><p>{props.email}
+//        <button onClick={() => props.onClick(props)}>
+//               Remove User
+//             </button></p>
+//             <button onClick={() => props.onClick(props)}>
+//               Admin
+//             </button>
+//             {props.value}
+//   </div>;
+// }
+
+
 
 function ListItem(props) {
   return <p>{props.value}</p>;
