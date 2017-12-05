@@ -7,11 +7,13 @@ import thunk from 'redux-thunk';
 import todos from '../reducers/todos';
 import error from '../reducers/errors';
 import user from '../reducers/user';
+import datas from '../reducers/datas';
 
 const rootReducer = combineReducers({   
     todos,
     error,
-    user
+    user,
+    datas
 });
 
 const store = createStore(

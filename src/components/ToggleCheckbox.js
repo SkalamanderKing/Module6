@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 export default class ToggleCheckbox extends React.Component {
     // state initialized outside constructor
     state = {

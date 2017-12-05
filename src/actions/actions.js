@@ -23,6 +23,50 @@ export function addTodo(todo){
 
 
 
+// signOut = () => {
+//   firebase
+//     .auth()
+//     .signOut()
+//     .then(window.location.reload());
+// };
+
+export function signOut(){
+  return function(dispatch){
+    firebase
+    .auth()
+    .signOut()
+    .then(window.location.reload())
+    .catch(error => {
+      dispatch({type: "FETCH_ERROR", error: error.message});
+    })
+  }
+}
+
+
+
+/*
+signIn = e => {
+  e.preventDefault();
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(this.state.email, this.state.password)
+    .then(this.setState({ loggedIn: true }));
+};
+
+export function signIn(onChange){
+  return function(dispatch){
+    e.preventDefault();
+    firebase
+    .auth()
+    .signInWithEmailAndPassword(this.state.email, this.state.password)
+    .then(this.setState({ loggedIn: true }))
+    .catch(error => {
+      dispatch({type: "FETCH_ERROR", error: error.message});
+    })
+  }
+}
+*/
+
 export function toggleCompleted(user){
   return function (dispatch){
     // We can set just a part of an object, like the completed property on
@@ -129,14 +173,18 @@ export function removeUserListener(){
     })
   }
 }
+
 export function userChanged() {
   return function(dispatch) {
     return firebase.auth().onAuthStateChanged(user => {
       if (user) {
+      //  dispatch({ type: "SIGN_IN", user: user})
+     // console.log(user.email);
         firebase.database().ref(`users/${user.uid}`).once('value')
         .then(user=> {
-          dispatch({ type: "SIGN_IN", user})
-          //console.log(user.val().text);
+ 
+          dispatch({ type: "SIGN_IN", user: user.val()})
+      //  console.log("hej"+user.val().email);
         })
       } else {
         dispatch({ type: "SIGN_OUT", user: '' });
@@ -145,6 +193,78 @@ export function userChanged() {
   };
 }
 
+export function userData() {
+  return function(dispatch) {
+    return firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+      //  dispatch({ type: "SIGN_IN", user: user})
+     // console.log(user.email);
+      //  firebase.database().ref(`users/${user.uid}`).once('value')
+        //.then(user=> {
+ 
+          dispatch({ type: "USER_SIGN_IN", user: user})
+     //console.log("hej "+user.email);
+      //  })
+      } else {
+        dispatch({ type: "USER_SIGN_OUT", user: '' });
+      }
+    });
+  };
+}
+
+
+// export function idTest(){
+//   return function(dispatch){
+//     firebase.auth().onAuthStateChanged(users => {
+//       if (users) {
+//        // console.log(users.email);
+//     //   dispatch({ type: "EMAIL", users: users.email})
+//       }
+//     //  else
+//       //dispatch({ type: "SIGN_IN", user: user.val()})
+//     })
+//   }
+// }
+
+
+// getIdOfUser = () => {
+//   firebase.auth().onAuthStateChanged(users => {
+//     if (users) {
+//       this.setState({ userUid: users.uid, email: users.email });
+//       this.getValueofUser(users.uid);
+//     }
+//   });
+// };  inlog
+
+
+
+
+
+/*
+
+*/
+// export function signIn(e, p){
+//   return function(dispatch){
+//    // e.preventDefault();
+//     return firebase
+//     .auth()
+//     .signInWithEmailAndPassword(e, p);
+//   //   .then(signIn=> {
+//   //    dispatch({ type: "SIGN_IN", user})
+//   // //console.log(user.val().text);
+//   // })
+//  // .then(this.setState({ loggedIn: true }));
+//   }
+// }
+  
+
+// signIn = e => {
+//   e.preventDefault();
+//   firebase
+//     .auth()
+//     .signInWithEmailAndPassword(this.state.email, this.state.password)
+//     .then(this.setState({ loggedIn: true }));
+// };
 
 // export function getIdOfUser(users){
 //   return function (dispatch){

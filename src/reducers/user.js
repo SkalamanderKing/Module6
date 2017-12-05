@@ -4,12 +4,14 @@ export default function user(state = [], action){
        // case "FETCH_ALL_USER":
          //return action.user;
         case "SIGN_IN":
-            return state.filter(user => user.key !== action.user.key)
+            return  [...state, action.user];
             //return [...state, action.user];
             case "USER_REMOVED":
             return state.filter(user => user.key !== action.user.key)
             case "SIGN_OUT":
-            return [...state, ""];
+            return "";
+          //  case "EMAIL":
+            //return [...state, action.user];
             case "CHILD_ADDED_USER":
             return [...state, action.user];
             case "USER_CHANGED":

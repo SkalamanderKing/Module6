@@ -6,11 +6,11 @@ import "../App.css";
 import Jumbotron from "./Jumbotron";
 import Footer from "./Footer";
 import Container from "./Container";
-import Navbar from "./Navbar";
+//import Navbar from "./Navbar";
 import firebase from "../firebase";
 import Input from "./Input";
 //import Modal from "./Modal";
-import ToggleCheckbox from "./ToggleCheckbox";
+//import ToggleCheckbox from "./ToggleCheckbox";
 import Uservalue from "./Uservalue";
 /* Good news, the logic in the component is basically the same!
  * It is the actions that need updating! We are creating our own API in our actions :)
@@ -21,13 +21,14 @@ class App extends Component {
     text: "",
     email: "",
     password: "",
-    userUid: undefined,
+    userUid: "",
     isAdmin: "",
     // user:undefined,
     loggedIn: undefined,
     //number: 1
     value: "",
     signInOrUp: true,
+    inlog: ""
     
   };
 
@@ -37,16 +38,18 @@ class App extends Component {
     // this.props.fetchUser();
     //One listener for every item added
     this.props.addTodoListener();
-    this.props.addUserListener();
+    
+    this.props.removeTodoListener();
     //One listener for every change in ever item, listens to ANY change
     this.props.changeTodoListener();
     //Listens to which item is being removed
 
-    this.props.userChanged();
-    this.getIdOfUser();
-    this.props.changeUserListener();
-    this.props.removeTodoListener();
-    this.props.removeUserListener();
+    //this.props.userChanged();
+  //  this.getIdOfUser();
+  //  this.props.changeUserListener();
+  //  this.props.addUserListener();
+  //  this.props.removeUserListener();
+ //this.props.userData();
   }
 
   add = e => {
@@ -69,7 +72,7 @@ class App extends Component {
         this.getValueofUser(users.uid);
       }
     });
-  };
+  };  
 
   getValueofUser = id => {
     if (id !== undefined) {
@@ -82,7 +85,19 @@ class App extends Component {
       });
     }
   };
+//verka rju inte köras?
+currentUserData = () => {
+  if(this.props.datas!==undefined)
+  {
+    let user = this.props.datas;
+    this.setState({ userUid: user.uid, 
+      email: user.email });
+   //  this.getValueofUser(this.state.userUid);
+   console.log("hej på dej! "+this.state.userUid+" "+this.state.email);
+   // console.log("hej "+this.props.datas.uid);
+  }
 
+}
   /*
   getUserUid = () => {
     var userID=undefined;
@@ -111,12 +126,12 @@ class App extends Component {
   remove = todo => {
     this.props.removeTodo(todo);
   };
-  removeUser = user => {
-    this.props.removeUsers(user);
-    //(alert("hej"));
-  };
+  // removeUser = user => {
+  //   this.props.removeUsers(user);
+  //   //(alert("hej"));
+  // };
 
-  getAllusers = user => {};
+  //getAllusers = user => {};
 
   edit = todo => {
     const editedTodo = Object.assign({}, todo, { text: this.state.value });
@@ -146,7 +161,9 @@ class App extends Component {
             .ref(`users/${user.uid}`)
             .set(newUser)
             .then(this.setState({ loggedIn: true }));
+      
       });
+
   };
 
   signIn = e => {
@@ -154,15 +171,21 @@ class App extends Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(this.setState({ loggedIn: true }));
+     .then(this.setState({ loggedIn: true }));
+     this.getIdOfUser();
+   this.props.userData();
+   this.currentUserData();
+
+     this.props.changeUserListener();
+    this.props.addUserListener();
+    this.props.removeUserListener();
+   // this.props.userChanged();
+
+
+ //console.log(  this.props.idTest());
   };
 
-  signOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(window.location.reload());
-  };
+
 
   setOption = (event) => {
 
@@ -172,34 +195,51 @@ class App extends Component {
     this.setState({ signInOrUp: true })
   }
 
+
+
   render() {
+    //var array=this.props.user;
+    //if(array!=undefined || array!=="" || array==null)
+  //  console.log(array);
+  // console.log("hej "+this.props.datas.email);
+
+  //array.find(x => x.name === 'string 1')
+
+ // isAdmin(array);
+ //isAdmin(this.props.user);
+ //console.log(this.props.user);
+ console.log(this.props.datas.uid);
+
+    var userList=undefined;
     
-    const userList = this.props.user.map((user, k) => {
-      if (this.state.isAdmin && user !== "") {
+    if(this.props.datas.email){
+    userList = this.props.user.map((user, k) => {
+    //  if (this.state.isAdmin && user !== "") {
         return <div key={k}>
-            <Uservalue value={user.email} title="Remove" onClick={() => this.removeUser(user)} />
+            <Uservalue value={user.email} title="Remove" onClick={() => this.props.removeUsers(user)} />
             <Uservalue value={user.isAdmin} title="Admin" onClick={() => this.toggleCompleted(user)} />
           </div>;
-      } else return <div key={k}> </div>;
+     // } else return <div key={k}> </div>;
     });
-
+  }
     
-    // const userList = this.props.user.map((user, k) => {
-    //   if (this.state.isAdmin && user !== "") {
-    //     return (
-    //       <div key={k}>
-    //         {/*<div key={k}> {user.email} */}
-    //         <UserToRemove {...user} 
-    //         onClick={() => this.removeUser(user)}  />
-      
-    //         <UserIsAdmin  value={user.isAdmin}
-    //         onClick={() => this.toggleCompleted(user)}  
-            
-    //         />
-    //       </div>
-    //     );
-    //   } else return <div key={k}> </div>;
-    // });
+  // if(this.state.loggedIn){
+  //   userList = this.props.user.map((user, k) => {
+  //     if (this.state.isAdmin && user !== "") {
+  //       return <div key={k}>
+  //           <Uservalue value={user.email} title="Remove" onClick={() => this.props.removeUsers(user)} />
+  //           <Uservalue value={user.isAdmin} title="Admin" onClick={() => this.toggleCompleted(user)} />
+  //         </div>;
+  //     } else return <div key={k}> </div>;
+  //   });
+  // }
+
+
+      // removeUser = user => {
+  //   this.props.removeUsers(user);
+  //   //(alert("hej"));
+  // };
+ 
     // const userList = this.props.user.map((user, k) => {
     //   if (this.state.isAdmin && user !== "") {
     //     return (
@@ -334,11 +374,9 @@ class App extends Component {
     }
 */
 
-
     return <div className="App">
         {/* <Navbar></Navbar> */}
 
-  
 
         {this.state.signInOrUp && !this.state.loggedIn && <form onSubmit={this.signIn}>
         <div className="form-inline">
@@ -354,8 +392,8 @@ class App extends Component {
             </form>}
 
         {this.state.loggedIn && <p>
-            {this.state.email}
-            <button className="button" id="myButt3" onClick={this.signOut}>
+            {this.props.datas.email}
+            <button className="button" id="myButt3" onClick={this.props.signOut}> 
               {" "}
               Log out{" "}
             </button>{" "}
@@ -444,20 +482,35 @@ class App extends Component {
       </div>;
   }
 }
-/*
-function isAdmin(obj){
+
+function isLoggedIn(user){
+  if (user) {
+    return true;
+  } else {
+    return false
+  }
+}
+
+
+function isAdmin(arr){
   
     // for (var prop in obj) {
     //   console.log(`obj.${prop} = ${obj[prop]}`);
     // }
-    if(obj!==undefined)
-    var hejsan= Object.keys(obj).map(k => obj[k]);
-    if(hejsan!==undefined)
-    console.log( hejsan[1]);
-    return hejsan;
+ //   let kkk =undefined;
+ let plupp="";
+    if(arr!==undefined)
+    var hejsan= Object.keys(arr).map(k => arr[k]);
+    //if(hejsan!==undefined)
+   // kkk = hejsan.find(o => o.isAdmin === true);
+  //  for (var i = 0; i < arr.length; i++){
+  //   plupp = arr[i].find(o => o.isAdmin=== true);
+  //  }
+    console.log(hejsan);
+    //return hejsan;
   
   }
-
+/*
 
  function List({ arrayOfItems }) {
   return (
@@ -477,22 +530,22 @@ function TodosList(props) {
 
 
 
-function UserToRemove(props) {
-  return <div><p>{props.email}
-       <button onClick={() => props.onClick(props)}>
-              Remove User
-            </button></p>
-  </div>;
-}
+// function UserToRemove(props) {
+//   return <div><p>{props.email}
+//        <button onClick={() => props.onClick(props)}>
+//               Remove User
+//             </button></p>
+//   </div>;
+// }
 
-function UserIsAdmin(props) {
-  return <div><p>
-       <button onClick={() => props.onClick(props)}>
-              Admin
-            </button>{props.value.toString()}
-            </p>
-  </div>;
-}
+// function UserIsAdmin(props) {
+//   return <div><p>
+//        <button onClick={() => props.onClick(props)}>
+//               Admin
+//             </button>{props.value.toString()}
+//             </p>
+//   </div>;
+// }
 
 // function UserItem(props) {
 //   return <div><p>{props.email}
@@ -508,9 +561,9 @@ function UserIsAdmin(props) {
 
 
 
-function ListItem(props) {
-  return <p>{props.value}</p>;
-}
+// function ListItem(props) {
+//   return <p>{props.value}</p>;
+// }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(actions, dispatch);
@@ -520,7 +573,8 @@ function mapStateToProps(state) {
   return {
     todos: state.todos,
     error: state.error,
-    user: state.user
+    user: state.user,
+    datas: state.datas
   };
 }
 
