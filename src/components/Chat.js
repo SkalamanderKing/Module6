@@ -1,29 +1,21 @@
-//import Uservalue from "./Uservalue";
 import React, { Component } from "react";
-//import firebase from "../firebase";
 import * as actions from "../actions/actions";
-//import Input from "./Input";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Container from "./Container";
 class Chat extends Component {
   state = {
     text: "",
-    isAdmin: true,
     value: ""
   };
 
   add = e => {
-    //console.log(e.target.id);
-    //No need for the random ID, just send these values
     this.props.addTodo({
       text: this.state.value,
-      // completed: false,
       postNo: e.target.id,
       createdBy: this.props.datas.uid
     });
     this.setState({ value: "" });
-    // this.refs.someName.value = '';
   };
 
   remove = todo => {
@@ -36,12 +28,9 @@ class Chat extends Component {
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
-  // this.state.isAdmin &&
 
   render() {
     const todoList = this.props.todos.map((todo, k) => {
-      // <ListItem key={todo.toString()}
-      // value={todo} />
       if (
         todo.postNo === "3" &&
         (todo.createdBy === this.props.datas.uid || this.props.datas.isadmin)
@@ -49,7 +38,6 @@ class Chat extends Component {
         return (
           <div key={k}>
             {todo.text}
-            {/* {console.log(todo.postNo)} */}
             <button className="button" onClick={() => this.remove(todo)}>
               X
             </button>
@@ -63,9 +51,6 @@ class Chat extends Component {
     });
 
     const todoList2 = this.props.todos.map((todo, k) => {
-      // if(this.state.number===1)
-
-      //  if (todo.createdBy === this.state.userUid || this.state.isAdmin)
       if (
         todo.postNo === "2" &&
         (todo.createdBy === this.props.datas.uid || this.props.datas.isadmin)
@@ -73,7 +58,6 @@ class Chat extends Component {
         return (
           <div key={k}>
             {todo.text}
-            {/* {console.log(todo.postNo)} */}
             <button className="button" onClick={() => this.remove(todo)}>
               X
             </button>
@@ -182,7 +166,6 @@ class Chat extends Component {
             }}
           >
             {todoList2}
-
           </div>
         </Container>
       </div>
@@ -199,8 +182,7 @@ function mapStateToProps(state) {
     todos: state.todos,
     error: state.error,
     user: state.user,
-    datas: state.datas,
-   // isadmin: state.isadmin
+    datas: state.datas
   };
 }
 

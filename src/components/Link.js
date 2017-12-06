@@ -1,9 +1,4 @@
-import React from 'react';
-
+import React from "react";
 export default function Link(props) {
-  return (
-    <a href={ props.to }>
-        { props.title }
-    </a>
-  );
+  return <a href={props.to}>{props.title}</a>;
 }

@@ -17,8 +17,7 @@ class LoginForm extends Component {
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password);
-    //  .then(this.setState({ loggedIn: true }));
-   this.props.isAdmin();
+    this.props.isAdmin();
   };
 
   register = e => {
@@ -37,7 +36,6 @@ class LoginForm extends Component {
             .database()
             .ref(`users/${user.uid}`)
             .set(newUser);
-        //  .then(this.setState({ loggedIn: true }));
       });
   };
 
@@ -47,8 +45,6 @@ class LoginForm extends Component {
     else this.setState({ signInOrUp: true });
   };
   render() {
- //  console.log(this.props.isadmin);
-
     return (
       <div>
         {this.state.signInOrUp &&
@@ -129,8 +125,7 @@ function mapStateToProps(state) {
     todos: state.todos,
     error: state.error,
     user: state.user,
-    datas: state.datas,
-  //  isadmin: state.isadmin
+    datas: state.datas
   };
 }
 

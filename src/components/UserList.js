@@ -1,17 +1,13 @@
 import Uservalue from "./Uservalue";
 import React, { Component } from "react";
-//import firebase from "../firebase";
 import * as actions from "../actions/actions";
-///import Input from "./Input";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
 class UserList extends Component {
   state = {};
-  // this.state.isAdmin &&
 
   render() {
-   // console.log("lii "+this.props.datas.isadmin);
     var userList = undefined;
     if (this.props.datas.isadmin) {
       userList = this.props.user.map((user, k) => {
@@ -50,8 +46,7 @@ function mapStateToProps(state) {
     todos: state.todos,
     error: state.error,
     user: state.user,
-    datas: state.datas,
-   // isadmin: state.isadmin
+    datas: state.datas
   };
 }
 

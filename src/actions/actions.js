@@ -1,13 +1,4 @@
 import firebase from "../firebase";
-//import * as admin from "firebase-admin";
-//var admin = require("firebase-admin");
-
-/*
- * Notice that the actual actions in here doesn't dispatch any actions 
- * to the reducers. This is because we have set up listener further down
- * If we would dispatch both in the action and the listener we would 
- * get double updates. We only need the listeners to make the change
- */
 
 export function addTodo(todo) {
   return function(dispatch) {
@@ -21,13 +12,6 @@ export function addTodo(todo) {
   };
 }
 
-// signOut = () => {
-//   firebase
-//     .auth()
-//     .signOut()
-//     .then(window.location.reload());
-// };
-
 export function signOut() {
   return function(dispatch) {
     firebase
@@ -40,33 +24,8 @@ export function signOut() {
   };
 }
 
-/*
-signIn = e => {
-  e.preventDefault();
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(this.state.email, this.state.password)
-    .then(this.setState({ loggedIn: true }));
-};
-
-export function signIn(onChange){
-  return function(dispatch){
-    e.preventDefault();
-    firebase
-    .auth()
-    .signInWithEmailAndPassword(this.state.email, this.state.password)
-    .then(this.setState({ loggedIn: true }))
-    .catch(error => {
-      dispatch({type: "FETCH_ERROR", error: error.message});
-    })
-  }
-}
-*/
-
 export function toggleCompleted(user) {
   return function(dispatch) {
-    // We can set just a part of an object, like the completed property on
-    // just one item. Go to the path of the resource and change the value
     firebase
       .database()
       .ref(`users/${user.key}/isAdmin`)
@@ -79,15 +38,11 @@ export function toggleCompleted(user) {
 
 export function editTodo(todo) {
   return function(dispatch) {
-    //Be advised that '.set()' REPLACES THE WHOLE OBJECT, it
-    //doesn't just update the values that needs to be updated
     firebase
       .database()
       .ref(`todos/${todo.key}`)
       .set({
         text: todo.text,
-        //completed: todo.completed,
-        //number:todo.number,
         postNo: todo.postNo,
         createdBy: todo.createdBy
       })
@@ -108,11 +63,6 @@ export function addUserListener() {
       });
   };
 }
-/*
- * Three event listeners, one for listening when we add a todo, 'child_added',
- * one when we update any value in a child: 'child_changed' and one when 
- * a todo is removed from 'todos: 'child_removed'
- */
 
 export function addTodoListener() {
   return function(dispatch) {
@@ -120,10 +70,6 @@ export function addTodoListener() {
       .database()
       .ref(`todos`)
       .on("child_added", snapshot => {
-        /* snapshot is the item that is being adde, same as before, grab the
-       * value, then add the key. After we have created this, dispatch!
-       * Same logic in all the listeners
-       */
         const todo = { ...snapshot.val(), key: snapshot.key };
         dispatch({ type: "CHILD_ADDED", todo });
       });
@@ -165,6 +111,7 @@ export function removeTodo(todo) {
       });
   };
 }
+
 export function removeUsers(user) {
   return function(dispatch) {
     firebase
@@ -204,15 +151,12 @@ export function userChanged() {
   return function(dispatch) {
     return firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        //  dispatch({ type: "SIGN_IN", user: user})
-        // console.log(user.email);
         firebase
           .database()
           .ref(`users/${user.uid}`)
           .once("value")
           .then(user => {
             dispatch({ type: "SIGN_IN", user: user.val() });
-            //  console.log("hej"+user.val().email);
           });
       } else {
         dispatch({ type: "SIGN_OUT", user: "" });
@@ -225,16 +169,6 @@ export function userData() {
   return function(dispatch) {
     return firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        //  dispatch({ type: "SIGN_IN", user: user})
-        // console.log(user.email);
-        //  firebase.database().ref(`users/${user.uid}`).once('value')
-        //.then(user=> {
-        //  this.isAdmin(user.uid);
-        //  var p = user.uid;
-        //   console.log("test "+p);
-        
-       
-
         var id = user.uid;
         var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
         firebaseRef.once("value").then(dataSnapshot => {
@@ -242,14 +176,9 @@ export function userData() {
             uid: user.uid,
             email: user.email,
             isadmin: dataSnapshot.val()
-      }
-        
+          };
           dispatch({ type: "USER_SIGN_IN", user: obj });
         });
-  
-   
-        //console.log("hej "+user.email);
-        //  })
       } else {
         dispatch({ type: "USER_SIGN_OUT", user: "" });
       }
@@ -257,175 +186,16 @@ export function userData() {
   };
 }
 
-// getIdOfUser = () => {
-//   firebase.auth().onAuthStateChanged(users => {
-//     if (users) {
-//       this.setState({ userUid: users.uid, email: users.email });
-//      this.getValueofUser(users.uid);
-//     }
-//   });
-// };
-
 export function isAdmin() {
   return function(dispatch) {
     firebase.auth().onAuthStateChanged(users => {
       if (users) {
-        //    this.setState({ userUid: users.uid, email: users.email });
-        // this.getValueofUser(users.uid);
         var id = users.uid;
         var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
         firebaseRef.once("value").then(dataSnapshot => {
-          var t = dataSnapshot.val();
-        //  console.log(dataSnapshot.val());
           dispatch({ type: "IS_ADMIN", isadmin: dataSnapshot.val() });
         });
       } else dispatch({ type: "IS_NOT_ADMIN", isadmin: null });
     });
   };
 }
-
-// var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
-// firebaseRef.once("value").then(dataSnapshot => {
-//   var t = dataSnapshot.val();
-
-//   console.log(user.uid);
-//   var id =user.uid;
-
-// if (id !== undefined) {
-//       var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
-//       firebaseRef.once("value").then(snapshot => {
-//    //    var adm = {...snapshot.val(), key: snapshot.key };
-//        console.log("tjingeling! "+adm);
-//     dispatch({ type: "IS_ADMIN",  adm })
-
-//       });
-//   //  }
-//    // else  dispatch({ type: "IS_NOT_ADMIN", isAdmin: "" })
-//   }
-// }
-
-// getValueofUser = id => {
-//   if (id !== undefined) {
-//     var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
-//     firebaseRef.once("value").then(dataSnapshot => {
-//       var t = dataSnapshot.val();
-//       this.setState({
-//         isAdmin: t
-//       });
-//     });
-//   }
-// };
-
-// export function idTest(){
-//   return function(dispatch){
-//     firebase.auth().onAuthStateChanged(users => {
-//       if (users) {
-//        // console.log(users.email);
-//     //   dispatch({ type: "EMAIL", users: users.email})
-//       }
-//     //  else
-//       //dispatch({ type: "SIGN_IN", user: user.val()})
-//     })
-//   }
-// }
-
-// getIdOfUser = () => {
-//   firebase.auth().onAuthStateChanged(users => {
-//     if (users) {
-//       this.setState({ userUid: users.uid, email: users.email });
-//       this.getValueofUser(users.uid);
-//     }
-//   });
-// };  inlog
-
-/*
-
-*/
-// export function signIn(e, p){
-//   return function(dispatch){
-//    // e.preventDefault();
-//     return firebase
-//     .auth()
-//     .signInWithEmailAndPassword(e, p);
-//   //   .then(signIn=> {
-//   //    dispatch({ type: "SIGN_IN", user})
-//   // //console.log(user.val().text);
-//   // })
-//  // .then(this.setState({ loggedIn: true }));
-//   }
-// }
-
-// signIn = e => {
-//   e.preventDefault();
-//   firebase
-//     .auth()
-//     .signInWithEmailAndPassword(this.state.email, this.state.password)
-//     .then(this.setState({ loggedIn: true }));
-// };
-
-// export function getIdOfUser(users){
-//   return function (dispatch){
-//     firebase.auth().onAuthStateChanged((users) => {
-//       if (users) {
-//         this.setState({ userUid: users.uid, email:users.email});
-//       }
-//     });
-
-//   }
-// }
-// import firebase from "../firebase";
-
-// export function addTodo(todo) {
-//   return function(dispatch) {
-//     firebase
-//       .database()
-//       .ref(`todos`)
-//       .push(todo)
-//       .catch(error => {
-//         //Should use multiple errors! But I am too lazy :) You do it!
-//         dispatch({ type: "FETCH_ERROR", error: error.message });
-//       });
-//   };
-// }
-
-// export function removeTodo(todo) {
-//   return function(dispatch) {
-//     //Get the key, the place of the object, and call remove, you must have
-//     //the key to remove an item, we always use the path to the item
-//     firebase
-//       .database()
-//       .ref(`todos/${todo.key}`)
-//       .remove();
-//   };
-// }
-
-// export function toggleCompleted(todo) {
-//   return function(dispatch) {
-//     // We can set just a part of an object, like the completed property on
-//     // just one item. Go to the path of the resource and change the value
-//     firebase
-//       .database()
-//       .ref(`todos/${todo.key}/completed`)
-//       .set(!todo.completed)
-//       .catch(error => {
-//         dispatch({ type: "FETCH_ERROR", error: error.message });
-//       });
-//   };
-// }
-
-// export function editTodo(todo) {
-//   return function(dispatch) {
-//     //Be advised that '.set()' REPLACES THE WHOLE OBJECT, it
-//     //doesn't just update the values that needs to be updated
-//     firebase
-//       .database()
-//       .ref(`todos/${todo.key}`)
-//       .set({
-//         text: todo.text,
-//         completed: todo.completed
-//       })
-//       .catch(error => {
-//         dispatch({ type: "FETCH_ERROR", error: error.message });
-//       });
-//   };
-// }
