@@ -8,12 +8,13 @@ import todos from '../reducers/todos';
 import error from '../reducers/errors';
 import user from '../reducers/user';
 import datas from '../reducers/datas';
-
+import isadmin from '../reducers/isadmin';
 const rootReducer = combineReducers({   
     todos,
     error,
     user,
-    datas
+    datas,
+    isadmin
 });
 
 const store = createStore(

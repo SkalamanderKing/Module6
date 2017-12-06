@@ -1,5 +1,4 @@
-
-import firebase from '../firebase';
+import firebase from "../firebase";
 //import * as admin from "firebase-admin";
 //var admin = require("firebase-admin");
 
@@ -10,18 +9,17 @@ import firebase from '../firebase';
  * get double updates. We only need the listeners to make the change
  */
 
-
-
-export function addTodo(todo){
-  return function(dispatch){
-    firebase.database().ref(`todos`).push(todo)
-    .catch(error => {
-      dispatch({type: "FETCH_ERROR", error: error.message});
-    })
-  }
+export function addTodo(todo) {
+  return function(dispatch) {
+    firebase
+      .database()
+      .ref(`todos`)
+      .push(todo)
+      .catch(error => {
+        dispatch({ type: "FETCH_ERROR", error: error.message });
+      });
+  };
 }
-
-
 
 // signOut = () => {
 //   firebase
@@ -30,19 +28,17 @@ export function addTodo(todo){
 //     .then(window.location.reload());
 // };
 
-export function signOut(){
-  return function(dispatch){
+export function signOut() {
+  return function(dispatch) {
     firebase
-    .auth()
-    .signOut()
-    .then(window.location.reload())
-    .catch(error => {
-      dispatch({type: "FETCH_ERROR", error: error.message});
-    })
-  }
+      .auth()
+      .signOut()
+      .then(window.location.reload())
+      .catch(error => {
+        dispatch({ type: "FETCH_ERROR", error: error.message });
+      });
+  };
 }
-
-
 
 /*
 signIn = e => {
@@ -67,41 +63,50 @@ export function signIn(onChange){
 }
 */
 
-export function toggleCompleted(user){
-  return function (dispatch){
+export function toggleCompleted(user) {
+  return function(dispatch) {
     // We can set just a part of an object, like the completed property on
     // just one item. Go to the path of the resource and change the value
-    firebase.database().ref(`users/${user.key}/isAdmin`).set(!user.isAdmin)
-    .catch(error => {
-      dispatch({type: "FETCH_ERROR", error: error.message});
-    })
-  }
+    firebase
+      .database()
+      .ref(`users/${user.key}/isAdmin`)
+      .set(!user.isAdmin)
+      .catch(error => {
+        dispatch({ type: "FETCH_ERROR", error: error.message });
+      });
+  };
 }
 
-export function editTodo(todo){
-  return function (dispatch){
-    //Be advised that '.set()' REPLACES THE WHOLE OBJECT, it 
+export function editTodo(todo) {
+  return function(dispatch) {
+    //Be advised that '.set()' REPLACES THE WHOLE OBJECT, it
     //doesn't just update the values that needs to be updated
-    firebase.database().ref(`todos/${todo.key}`).set({
-      text: todo.text,
-      //completed: todo.completed,
-      //number:todo.number,
-      postNo: todo.postNo,
-      createdBy:todo.createdBy
-    })
-    .catch(error => {
-      dispatch({type: "FETCH_ERROR", error: error.message});
-    })
-  }
+    firebase
+      .database()
+      .ref(`todos/${todo.key}`)
+      .set({
+        text: todo.text,
+        //completed: todo.completed,
+        //number:todo.number,
+        postNo: todo.postNo,
+        createdBy: todo.createdBy
+      })
+      .catch(error => {
+        dispatch({ type: "FETCH_ERROR", error: error.message });
+      });
+  };
 }
 
-export function addUserListener(){
-  return function(dispatch){
-    return firebase.database().ref("users").on("child_added", user =>{
-      const userValue = {...user.val(), key: user.key };
-      dispatch({ type: "CHILD_ADDED_USER", user: userValue })
-    })
-  }
+export function addUserListener() {
+  return function(dispatch) {
+    return firebase
+      .database()
+      .ref("users")
+      .on("child_added", user => {
+        const userValue = { ...user.val(), key: user.key };
+        dispatch({ type: "CHILD_ADDED_USER", user: userValue });
+      });
+  };
 }
 /*
  * Three event listeners, one for listening when we add a todo, 'child_added',
@@ -109,85 +114,108 @@ export function addUserListener(){
  * a todo is removed from 'todos: 'child_removed'
  */
 
-export function addTodoListener(){
-  return function(dispatch){
-    return firebase.database().ref(`todos`).on('child_added', snapshot =>{
-      /* snapshot is the item that is being adde, same as before, grab the
+export function addTodoListener() {
+  return function(dispatch) {
+    return firebase
+      .database()
+      .ref(`todos`)
+      .on("child_added", snapshot => {
+        /* snapshot is the item that is being adde, same as before, grab the
        * value, then add the key. After we have created this, dispatch!
        * Same logic in all the listeners
        */
-      const todo = {...snapshot.val(), key: snapshot.key };
-      dispatch({ type: "CHILD_ADDED", todo })
-    })
-  }
+        const todo = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "CHILD_ADDED", todo });
+      });
+  };
 }
 
-export function changeTodoListener(){
-  return function(dispatch){
-    return firebase.database().ref(`todos`).on('child_changed', snapshot =>{
-      const todo = {...snapshot.val(), key: snapshot.key };
-      dispatch({ type: "CHILD_CHANGED", todo })
-    })
-  }
+export function changeTodoListener() {
+  return function(dispatch) {
+    return firebase
+      .database()
+      .ref(`todos`)
+      .on("child_changed", snapshot => {
+        const todo = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "CHILD_CHANGED", todo });
+      });
+  };
 }
 
-export function changeUserListener(){
-  return function(dispatch){
-    return firebase.database().ref(`users`).on('child_changed', snapshot =>{
-      const user = {...snapshot.val(), key: snapshot.key };
-      dispatch({ type: "USER_CHANGED", user })
-    })
-  }
+export function changeUserListener() {
+  return function(dispatch) {
+    return firebase
+      .database()
+      .ref(`users`)
+      .on("child_changed", snapshot => {
+        const user = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "USER_CHANGED", user });
+      });
+  };
 }
 
-export function removeTodo(todo){
-  return function (dispatch){
-    firebase.database().ref(`todos/${todo.key}`).remove()
-    .catch(error => {
-      dispatch({type: "FETCH_ERROR", error: error.message});
-    })
-  }
+export function removeTodo(todo) {
+  return function(dispatch) {
+    firebase
+      .database()
+      .ref(`todos/${todo.key}`)
+      .remove()
+      .catch(error => {
+        dispatch({ type: "FETCH_ERROR", error: error.message });
+      });
+  };
 }
-export function removeUsers(user){
-  return function (dispatch){
-    firebase.database().ref(`users/${user.key}`).remove()
-    .catch(error => {
-      dispatch({type: "FETCH_ERROR", error: error.message});
-    })
-  }
+export function removeUsers(user) {
+  return function(dispatch) {
+    firebase
+      .database()
+      .ref(`users/${user.key}`)
+      .remove()
+      .catch(error => {
+        dispatch({ type: "FETCH_ERROR", error: error.message });
+      });
+  };
 }
 
-export function removeTodoListener(){
-  return function(dispatch){
-    return firebase.database().ref(`todos`).on('child_removed', snapshot =>{
-      const todo = {...snapshot.val(), key: snapshot.key };
-      dispatch({ type: "CHILD_REMOVED", todo })
-    })
-  }
+export function removeTodoListener() {
+  return function(dispatch) {
+    return firebase
+      .database()
+      .ref(`todos`)
+      .on("child_removed", snapshot => {
+        const todo = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "CHILD_REMOVED", todo });
+      });
+  };
 }
-export function removeUserListener(){
-  return function(dispatch){
-    return firebase.database().ref(`users`).on('child_removed', snapshot =>{
-      const user = {...snapshot.val(), key: snapshot.key };
-      dispatch({ type: "USER_REMOVED", user })
-    })
-  }
+export function removeUserListener() {
+  return function(dispatch) {
+    return firebase
+      .database()
+      .ref(`users`)
+      .on("child_removed", snapshot => {
+        const user = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "USER_REMOVED", user });
+      });
+  };
 }
 
 export function userChanged() {
   return function(dispatch) {
     return firebase.auth().onAuthStateChanged(user => {
       if (user) {
-      //  dispatch({ type: "SIGN_IN", user: user})
-     // console.log(user.email);
-        firebase.database().ref(`users/${user.uid}`).once('value')
-        .then(user=> {
- 
-          dispatch({ type: "SIGN_IN", user: user.val()})
-      //  console.log("hej"+user.val().email);
-        })
+        //  dispatch({ type: "SIGN_IN", user: user})
+        // console.log(user.email);
+        firebase
+          .database()
+          .ref(`users/${user.uid}`)
+          .once("value")
+          .then(user => {
+            dispatch({ type: "SIGN_IN", user: user.val() });
+            //  console.log("hej"+user.val().email);
+          });
       } else {
-        dispatch({ type: "SIGN_OUT", user: '' });
+        dispatch({ type: "SIGN_OUT", user: "" });
       }
     });
   };
@@ -197,21 +225,96 @@ export function userData() {
   return function(dispatch) {
     return firebase.auth().onAuthStateChanged(user => {
       if (user) {
-      //  dispatch({ type: "SIGN_IN", user: user})
-     // console.log(user.email);
-      //  firebase.database().ref(`users/${user.uid}`).once('value')
+        //  dispatch({ type: "SIGN_IN", user: user})
+        // console.log(user.email);
+        //  firebase.database().ref(`users/${user.uid}`).once('value')
         //.then(user=> {
- 
-          dispatch({ type: "USER_SIGN_IN", user: user})
-     //console.log("hej "+user.email);
-      //  })
+        //  this.isAdmin(user.uid);
+        //  var p = user.uid;
+        //   console.log("test "+p);
+        
+       
+
+        var id = user.uid;
+        var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
+        firebaseRef.once("value").then(dataSnapshot => {
+          var obj = {
+            uid: user.uid,
+            email: user.email,
+            isadmin: dataSnapshot.val()
+      }
+        
+          dispatch({ type: "USER_SIGN_IN", user: obj });
+        });
+  
+   
+        //console.log("hej "+user.email);
+        //  })
       } else {
-        dispatch({ type: "USER_SIGN_OUT", user: '' });
+        dispatch({ type: "USER_SIGN_OUT", user: "" });
       }
     });
   };
 }
 
+// getIdOfUser = () => {
+//   firebase.auth().onAuthStateChanged(users => {
+//     if (users) {
+//       this.setState({ userUid: users.uid, email: users.email });
+//      this.getValueofUser(users.uid);
+//     }
+//   });
+// };
+
+export function isAdmin() {
+  return function(dispatch) {
+    firebase.auth().onAuthStateChanged(users => {
+      if (users) {
+        //    this.setState({ userUid: users.uid, email: users.email });
+        // this.getValueofUser(users.uid);
+        var id = users.uid;
+        var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
+        firebaseRef.once("value").then(dataSnapshot => {
+          var t = dataSnapshot.val();
+        //  console.log(dataSnapshot.val());
+          dispatch({ type: "IS_ADMIN", isadmin: dataSnapshot.val() });
+        });
+      } else dispatch({ type: "IS_NOT_ADMIN", isadmin: null });
+    });
+  };
+}
+
+// var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
+// firebaseRef.once("value").then(dataSnapshot => {
+//   var t = dataSnapshot.val();
+
+//   console.log(user.uid);
+//   var id =user.uid;
+
+// if (id !== undefined) {
+//       var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
+//       firebaseRef.once("value").then(snapshot => {
+//    //    var adm = {...snapshot.val(), key: snapshot.key };
+//        console.log("tjingeling! "+adm);
+//     dispatch({ type: "IS_ADMIN",  adm })
+
+//       });
+//   //  }
+//    // else  dispatch({ type: "IS_NOT_ADMIN", isAdmin: "" })
+//   }
+// }
+
+// getValueofUser = id => {
+//   if (id !== undefined) {
+//     var firebaseRef = firebase.database().ref(`/users/` + id + `/isAdmin`);
+//     firebaseRef.once("value").then(dataSnapshot => {
+//       var t = dataSnapshot.val();
+//       this.setState({
+//         isAdmin: t
+//       });
+//     });
+//   }
+// };
 
 // export function idTest(){
 //   return function(dispatch){
@@ -226,7 +329,6 @@ export function userData() {
 //   }
 // }
 
-
 // getIdOfUser = () => {
 //   firebase.auth().onAuthStateChanged(users => {
 //     if (users) {
@@ -235,10 +337,6 @@ export function userData() {
 //     }
 //   });
 // };  inlog
-
-
-
-
 
 /*
 
@@ -256,7 +354,6 @@ export function userData() {
 //  // .then(this.setState({ loggedIn: true }));
 //   }
 // }
-  
 
 // signIn = e => {
 //   e.preventDefault();
@@ -332,4 +429,3 @@ export function userData() {
 //       });
 //   };
 // }
-
