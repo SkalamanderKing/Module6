@@ -5,11 +5,18 @@ import Input from "./Input";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
+const styles = {
+  marginTop: "0.5em",
+  float: "left"
+};
+const styles2 = {
+  color: "white"
+};
 class LoginForm extends Component {
   state = {
     email: "",
     password: "",
-    signInOrUp: true
+    signInOrUp: "true"
   };
 
   signIn = e => {
@@ -40,47 +47,47 @@ class LoginForm extends Component {
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
+
   setOption = event => {
     if (this.state.signInOrUp) this.setState({ signInOrUp: false });
     else this.setState({ signInOrUp: true });
   };
+
   render() {
     return (
       <div>
         {this.state.signInOrUp &&
           !this.props.datas.uid && (
-            <form onSubmit={this.signIn}>
-              <div className="form-inline">
-                <Input onChange={this.onChange} value={this.state.name} />
-                <input
-                  className="button"
-                  id="myButt"
-                  type="submit"
-                  value="Sign In"
-                />{" "}
-              </div>
+            <form onSubmit={this.signIn} className="navbar-form navbar-left">
+              <Input
+                onChange={this.onChange}
+                value={this.state.name}
+                className="button"
+                id="myButt"
+                type="submit"
+                buttonValue="Sign In"
+              />
             </form>
           )}
 
         {!this.state.signInOrUp &&
           !this.props.datas.uid && (
-            <form onSubmit={this.register}>
-              <div className="form-inline">
-                {" "}
-                <Input onChange={this.onChange} value={this.state.name} />
-                <input
-                  className="button"
-                  id="myButt2"
-                  type="submit"
-                  value="Register"
-                />
-              </div>
+            <form onSubmit={this.register} className="navbar-form navbar-left">
+              <Input
+                onChange={this.onChange}
+                value={this.state.name}
+                className="button"
+                id="myButt2"
+                type="submit"
+                buttonValue="Register"
+              />
             </form>
           )}
 
         {this.props.datas.uid && (
-          <p>
-            {this.props.datas.email}
+          <p style={styles2}>
+            {" "}
+            Welcome! {this.props.datas.email}
             <button
               className="button"
               id="myButt3"
@@ -93,22 +100,30 @@ class LoginForm extends Component {
         )}
 
         {!this.props.datas.uid && (
-          <div onClick={event => this.setOption(event)}>
-            <label className="radio-button">
-              {" "}
-              <input
-                type="radio"
-                value="SignIn"
-                defaultChecked
-                name="signInOrUp"
-              />
-              Sign In{" "}
-            </label>
-            <label className="radio-button">
-              {" "}
-              <input type="radio" value="Register" name="signInOrUp" />
-              Register{" "}
-            </label>
+          <div onClick={event => this.setOption(event)} style={styles}>
+            <div className="btn-group" data-toggle="buttons">
+              <label className="btn btn-primary active">
+                <input
+                  type="radio"
+                  value="SignIn"
+                  defaultChecked
+                  name="optradio"
+                  id={this.state.signInOrUp}
+                  autoComplete="off"
+                />
+                Sign In
+              </label>
+              <label className="btn btn-primary">
+                <input
+                  type="radio"
+                  value="Register"
+                  name="optradio"
+                  id={this.state.signInOrUp}
+                  autoComplete="off"
+                />
+                New user?
+              </label>
+            </div>
           </div>
         )}
       </div>

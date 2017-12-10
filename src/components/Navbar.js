@@ -1,35 +1,24 @@
 import React from "react";
-import Link from "./Link";
-import Modal from "./Modal";
-export default function Navbar() {
+import LoginForm from "./LoginForm";
+
+export default function Navbar(props) {
   return (
-    <div>
-      <nav className="navbar navbar-inverse navbar-fixed-top">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <button
-              type="button"
-              className="navbar-toggle"
-              data-toggle="collapse"
-              data-target="#bar"
-            >
-              <span className="icon-bar" />
-              <span className="icon-bar" />
-              <span className="icon-bar" />
-            </button>
-          </div>
-          <div className="collapse navbar-collapse" id="bar">
-            <ul className="nav navbar-nav navbar-right">
-              <li>
-                <a href="#" data-toggle="modal" data-target="#myModal">
-                  Sign in
-                </a>
-              </li>
-            </ul>
-          </div>
+    <nav className="navbar navbar-inverse navbar-fixed-top">
+      <div className="container-fluid">
+        <button
+          type="button"
+          className="navbar-toggle"
+          data-toggle="collapse"
+          data-target="#bar"
+        >
+          {" "}
+        </button>
+
+        <div className="collapse navbar-collapse" id="bar">
+          <LoginForm />
+          <ul className="nav navbar-nav navbar-right"> </ul>
         </div>
-      </nav>
-      <Modal />
-    </div>
+      </div>
+    </nav>
   );
 }

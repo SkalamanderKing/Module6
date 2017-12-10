@@ -2,16 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../actions/actions";
-import "../App.css";
+import "../styles/App.css";
 import Jumbotron from "./Jumbotron";
 import Footer from "./Footer";
-import SiteContent from "./SiteContent";
-import LoginForm from "./LoginForm";
 import UserList from "./UserList";
 import Chat from "./Chat";
+import Navbar from "./Navbar";
 
 class App extends Component {
-
   componentDidMount() {
     this.props.addTodoListener();
     this.props.removeTodoListener();
@@ -25,12 +23,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <LoginForm signIn={this.props.signIn} signOut={this.props.signOut} />
+        <Navbar />
         <Jumbotron />
         <div>
           <UserList />
         </div>
-        <SiteContent />
         <Chat />
         <Footer />
       </div>

@@ -6,9 +6,9 @@ export default function Jumbotron(props) {
     <section className="jumbotron">
       <Container>
         <div className="row text-center">
-          <h1>WELCOME!</h1>
+          <h1>BIRDY BLOG</h1>
           <Images
-            source={require("./birdy2.png")}
+            source={require("../img/birdy2.png")}
             style={{ width: 256, height: 320 }}
             alt="hej"
           />

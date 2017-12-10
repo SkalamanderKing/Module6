@@ -4,35 +4,41 @@ import * as actions from "../actions/actions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-class UserList extends Component {
-  state = {};
+const styles = {
+  textAlign: "center",
+  color: "black",
+  margin: "auto",
+  width: "60%",
+  border: "1px dotted #AAA",
+  padding: "10px",
+  backgroundColor: "lightyellow",
+  position: "relative",
+  display: "inline-block"
+};
 
+class UserList extends Component {
   render() {
-    var userList = undefined;
-    if (this.props.datas.isadmin) {
-      userList = this.props.user.map((user, k) => {
-        if (user !== "") {
-          return (
-            <div key={k}>
-              <Uservalue
-                value={user.email}
-                title="Remove"
-                onClick={() => this.props.removeUsers(user)}
-              />
-              <Uservalue
-                value={user.isAdmin}
-                title="Admin"
-                onClick={() => this.props.toggleCompleted(user)}
-              />
-            </div>
-          );
-        } else return <div key={k}> </div>;
-      });
-    }
+    const userList = this.props.user.map((user, k) => {
+      return (
+        <div key={k} style={styles}>
+          <Uservalue
+            value={user.email}
+            title="Remove this user?(click this text)"
+            onClick={() => this.props.removeUsers(user)}
+          />
+          <Uservalue
+            value={user.isAdmin}
+            title="Set this user as admin?(click this text)"
+            onClick={() => this.props.toggleCompleted(user)}
+          />
+        </div>
+      );
+    });
 
     return (
       <div>
-        <div>{userList}</div>
+        {this.props.datas.isadmin && <h1>Welcome Admin!</h1>}
+        {this.props.datas.isadmin && <div>{userList}</div>}
       </div>
     );
   }

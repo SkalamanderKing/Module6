@@ -4,7 +4,7 @@ export default function Footer(props) {
     <footer className="container">
       <div className="row">
         <div className="foo">
-          &copy; 2017 FREDRICK <br />Birdy Ltd, All rights reserved
+          &copy; 2018 FREDRICK <br />Birdy Ltd, All rights reserved
         </div>{" "}
       </div>
     </footer>
