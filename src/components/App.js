@@ -11,9 +11,9 @@ import Navbar from "./Navbar";
 
 class App extends Component {
   componentDidMount() {
-    this.props.addTodoListener();
-    this.props.removeTodoListener();
-    this.props.changeTodoListener();
+    this.props.addPostListener();
+    this.props.removePostListener();
+    this.props.changePostListener();
     this.props.changeUserListener();
     this.props.addUserListener();
     this.props.removeUserListener();
@@ -41,7 +41,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos,
+    posts: state.posts,
     error: state.error,
     user: state.user,
     datas: state.datas

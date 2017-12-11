@@ -197,6 +197,19 @@ footer {
   float: left;
 }
 
+#myButt4 {
+  font-size: 13px;
+  background-color: rgb(247, 243, 29);
+}
+
+#myButt5 {
+  font-size: 13px;
+  background-color: rgb(119, 143, 170);
+}
+#myButt6 {
+  font-size: 13px;
+  background-color: rgb(14, 13, 13);
+}
 button {
   background-color: Transparent;
   background-repeat: no-repeat;

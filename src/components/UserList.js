@@ -23,12 +23,13 @@ class UserList extends Component {
         <div key={k} style={styles}>
           <Uservalue
             value={user.email}
-            title="Remove this user?(click this text)"
+            title="Remove this user?"
             onClick={() => this.props.removeUsers(user)}
           />
           <Uservalue
             value={user.isAdmin}
-            title="Set this user as admin?(click this text)"
+         
+            title="Set/unset user as admin?"
             onClick={() => this.props.toggleCompleted(user)}
           />
         </div>
@@ -49,7 +50,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos,
+    posts: state.posts,
     error: state.error,
     user: state.user,
     datas: state.datas

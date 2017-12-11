@@ -137,7 +137,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos,
+    posts: state.posts,
     error: state.error,
     user: state.user,
     datas: state.datas

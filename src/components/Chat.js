@@ -42,7 +42,7 @@ class Chat extends Component {
   };
 
   add = e => {
-    this.props.addTodo({
+    this.props.addPost({
       text: this.state.value,
       postNo: e.target.id,
       createdBy: this.props.datas.uid
@@ -50,37 +50,37 @@ class Chat extends Component {
     this.setState({ value: "" });
   };
 
-  remove = todo => {
-    this.props.removeTodo(todo);
+  remove = post => {
+    this.props.removePost(post);
   };
 
-  edit = todo => {
-    const editedTodo = Object.assign({}, todo, { text: this.state.value });
-    this.props.editTodo(editedTodo);
+  edit = post => {
+    const editedpost = Object.assign({}, post, { text: this.state.value });
+    this.props.editPost(editedpost);
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   render() {
 
-    const todoList = this.props.todos.map((todo, k) => {
+    const postList = this.props.posts.map((post, k) => {
       if (
-        todo.postNo === "3" &&
-        (todo.createdBy === this.props.datas.uid || this.props.datas.isadmin)
+        post.postNo === "3" &&
+        (post.createdBy === this.props.datas.uid || this.props.datas.isadmin)
       ) {
         return (
           <div key={k} style={styles}>
-            {todo.text}
+            {post.text}
             <button
               className="button"
-              onClick={() => this.remove(todo)}
+              onClick={() => this.remove(post)}
               style={style3}
             >
               X
             </button>
             <button
               className="button2"
-              onClick={() => this.edit(todo)}
+              onClick={() => this.edit(post)}
               style={style4}
             >
               {" "}
@@ -88,33 +88,34 @@ class Chat extends Component {
             </button>
           </div>
         );
-      } else if (todo.postNo === "3")
+      } else if (post.postNo === "3")
         return (
           <div key={k} style={styles}>
-            {todo.text}{" "}
+            {post.text}{" "}
           </div>
         );
       return null;
     });
 
-    const todoList2 = this.props.todos.map((todo, k) => {
+    const postList2 = this.props.posts.map((post, k) => {
       if (
-        todo.postNo === "2" &&
-        (todo.createdBy === this.props.datas.uid || this.props.datas.isadmin)
+        post.postNo === "2" &&
+        (post.createdBy === this.props.datas.uid || this.props.datas.isadmin)
       ) {
         return (
           <div key={k} style={styles}>
-            {todo.text}
+            {post.text}
+        
             <button
               className="button"
-              onClick={() => this.remove(todo)}
+              onClick={() => this.remove(post)}
               style={style3}
             >
               X
             </button>
             <button
               className="button2"
-              onClick={() => this.edit(todo)}
+              onClick={() => this.edit(post)}
               style={style4}
             >
               {" "}
@@ -122,10 +123,10 @@ class Chat extends Component {
             </button>
           </div>
         );
-      } else if (todo.postNo === "2")
+      } else if (post.postNo === "2")
         return (
           <div key={k} style={styles}>
-            {todo.text}{" "}
+            {post.text}{" "}
           </div>
         );
       return null;
@@ -133,7 +134,7 @@ class Chat extends Component {
     return (
       <div>
         <Container>
-        <SiteContent />
+        <SiteContent postNo={1}/>
           {this.props.error}
           <p> Comments (Please login)</p>
           {this.props.datas.uid && (
@@ -161,11 +162,11 @@ class Chat extends Component {
             </button>
           )}
           <p />
-          <div className="chat">{todoList}</div>
+          <div className="chat">{postList}</div>
         </Container>
         <br />
         <Container>
-        <SiteContent />
+        <SiteContent postNo={2}/>
           {this.props.error}
          <p> Comments (Please login)</p>
           {this.props.datas.uid && (
@@ -193,7 +194,7 @@ class Chat extends Component {
             </button>
           )}
           <p />
-          <div className="chat">{todoList2}</div>
+          <div className="chat">{postList2}</div>
         </Container>
       </div>
     );
@@ -206,7 +207,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
   return {
-    todos: state.todos,
+    posts: state.posts,
     error: state.error,
     user: state.user,
     datas: state.datas

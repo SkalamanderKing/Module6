@@ -1,11 +1,11 @@
 import firebase from "../firebase";
 
-export function addTodo(todo) {
+export function addPost(post) {
   return function(dispatch) {
     firebase
       .database()
-      .ref(`todos`)
-      .push(todo)
+      .ref(`posts`)
+      .push(post)
       .catch(error => {
         dispatch({ type: "FETCH_ERROR", error: error.message });
       });
@@ -36,15 +36,15 @@ export function toggleCompleted(user) {
   };
 }
 
-export function editTodo(todo) {
+export function editPost(post) {
   return function(dispatch) {
     firebase
       .database()
-      .ref(`todos/${todo.key}`)
+      .ref(`posts/${post.key}`)
       .set({
-        text: todo.text,
-        postNo: todo.postNo,
-        createdBy: todo.createdBy
+        text: post.text,
+        postNo: post.postNo,
+        createdBy: post.createdBy
       })
       .catch(error => {
         dispatch({ type: "FETCH_ERROR", error: error.message });
@@ -64,26 +64,26 @@ export function addUserListener() {
   };
 }
 
-export function addTodoListener() {
+export function addPostListener() {
   return function(dispatch) {
     return firebase
       .database()
-      .ref(`todos`)
+      .ref(`posts`)
       .on("child_added", snapshot => {
-        const todo = { ...snapshot.val(), key: snapshot.key };
-        dispatch({ type: "CHILD_ADDED", todo });
+        const post = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "CHILD_ADDED", post });
       });
   };
 }
 
-export function changeTodoListener() {
+export function changePostListener() {
   return function(dispatch) {
     return firebase
       .database()
-      .ref(`todos`)
+      .ref(`posts`)
       .on("child_changed", snapshot => {
-        const todo = { ...snapshot.val(), key: snapshot.key };
-        dispatch({ type: "CHILD_CHANGED", todo });
+        const post = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "CHILD_CHANGED", post });
       });
   };
 }
@@ -100,11 +100,11 @@ export function changeUserListener() {
   };
 }
 
-export function removeTodo(todo) {
+export function removePost(post) {
   return function(dispatch) {
     firebase
       .database()
-      .ref(`todos/${todo.key}`)
+      .ref(`posts/${post.key}`)
       .remove()
       .catch(error => {
         dispatch({ type: "FETCH_ERROR", error: error.message });
@@ -124,14 +124,14 @@ export function removeUsers(user) {
   };
 }
 
-export function removeTodoListener() {
+export function removePostListener() {
   return function(dispatch) {
     return firebase
       .database()
-      .ref(`todos`)
+      .ref(`posts`)
       .on("child_removed", snapshot => {
-        const todo = { ...snapshot.val(), key: snapshot.key };
-        dispatch({ type: "CHILD_REMOVED", todo });
+        const post = { ...snapshot.val(), key: snapshot.key };
+        dispatch({ type: "CHILD_REMOVED", post });
       });
   };
 }
