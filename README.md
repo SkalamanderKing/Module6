@@ -1,4 +1,4 @@
-﻿## PROGRAMMING ASSIGNMENT – Module "Avancerad webbapplikationsutveckling del 2" YH-programmet JavaScriptutvecklare Frontend, Lernia Utbildning AB.
+## PROGRAMMING ASSIGNMENT – Module "Avancerad webbapplikationsutveckling del 2" YH-programmet JavaScriptutvecklare Frontend, Lernia Utbildning AB.
 
 # Content
 
