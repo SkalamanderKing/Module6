@@ -1,25 +1,25 @@
-##PROGRAMMING ASSIGNMENT – Module "Avancerad webbapplikationsutveckling del 2" YH-programmet JavaScriptutvecklare Frontend, Lernia Utbildning AB.
+## PROGRAMMING ASSIGNMENT – Module "Avancerad webbapplikationsutveckling del 2" YH-programmet JavaScriptutvecklare Frontend, Lernia Utbildning AB.
 
-#Content
+# Content
 
-Library
+* Library: 
 React (JavaScript library)
 Redux
 Bootstrap
 
-Languages
+* Languages: 
 JSX (JavaScript extension)
 JavaScript
 CSS
 html
 
-Middleware
+* Middleware: 
 Redux Thunk 
 
-Backend
+* Backend: 
 Firebase
 
-Program
+* Program: 
 Redux Dev Tools
 Visual Studio Code
 Photoshop
