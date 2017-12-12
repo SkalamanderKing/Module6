@@ -28,7 +28,6 @@ class UserList extends Component {
           />
           <Uservalue
             value={user.isAdmin}
-         
             title="Set/unset user as admin?"
             onClick={() => this.props.toggleCompleted(user)}
           />

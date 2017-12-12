@@ -13,7 +13,6 @@ export default function Navbar(props) {
         >
           {" "}
         </button>
-
         <div className="collapse navbar-collapse" id="bar">
           <LoginForm />
           <ul className="nav navbar-nav navbar-right"> </ul>

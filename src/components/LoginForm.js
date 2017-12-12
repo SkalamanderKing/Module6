@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import firebase from "../firebase";
 import * as actions from "../actions/actions";
 import Input from "./Input";
 import { connect } from "react-redux";
@@ -12,6 +11,7 @@ const styles = {
 const styles2 = {
   color: "white"
 };
+
 class LoginForm extends Component {
   state = {
     email: "",
@@ -21,29 +21,18 @@ class LoginForm extends Component {
 
   signIn = e => {
     e.preventDefault();
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password);
-    this.props.isAdmin();
+    this.props.signIn({
+      email: this.state.email,
+      password: this.state.password
+    });
   };
 
   register = e => {
     e.preventDefault();
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(user => {
-        const newUser = {
-          email: user.email,
-          isAdmin: false,
-          posts: ""
-        };
-        if (user !== null)
-          firebase
-            .database()
-            .ref(`users/${user.uid}`)
-            .set(newUser);
-      });
+    this.props.register({
+      email: this.state.email,
+      password: this.state.password
+    });
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -69,7 +58,7 @@ class LoginForm extends Component {
               />
             </form>
           )}
-
+        <section className="error"> {this.props.error}</section>
         {!this.state.signInOrUp &&
           !this.props.datas.uid && (
             <form onSubmit={this.register} className="navbar-form navbar-left">
@@ -108,7 +97,7 @@ class LoginForm extends Component {
                   value="SignIn"
                   defaultChecked
                   name="optradio"
-                  id={this.state.signInOrUp}
+                  id={String(this.state.signInOrUp)}
                   autoComplete="off"
                 />
                 Sign In
@@ -118,7 +107,7 @@ class LoginForm extends Component {
                   type="radio"
                   value="Register"
                   name="optradio"
-                  id={this.state.signInOrUp}
+                  id={String(this.state.signInOrUp)}
                   autoComplete="off"
                 />
                 New user?

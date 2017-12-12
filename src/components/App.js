@@ -10,6 +10,10 @@ import Chat from "./Chat";
 import Navbar from "./Navbar";
 
 class App extends Component {
+  state = {
+    loading: true
+  };
+
   componentDidMount() {
     this.props.addPostListener();
     this.props.removePostListener();
@@ -18,9 +22,15 @@ class App extends Component {
     this.props.addUserListener();
     this.props.removeUserListener();
     this.props.userData();
+    this.setState({ loading: false });
   }
 
   render() {
+    const { loading } = this.state;
+
+    if (loading) {
+      return null;
+    }
     return (
       <div className="App">
         <Navbar />

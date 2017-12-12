@@ -12,6 +12,40 @@ export function addPost(post) {
   };
 }
 
+export function signIn(loginInfo) {
+  return function(dispatch) {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(loginInfo.email, loginInfo.password)
+      .catch(error => {
+        dispatch({ type: "FETCH_ERROR", error: error.message });
+      });
+    isAdmin();
+  };
+}
+
+export function register(newOne) {
+  return function(dispatch) {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(newOne.email, newOne.password)
+      .then(user => {
+        const newUser = {
+          email: user.email,
+          isAdmin: false
+        };
+        if (user !== null)
+          firebase
+            .database()
+            .ref(`users/${user.uid}`)
+            .set(newUser)
+            .catch(error => {
+              dispatch({ type: "FETCH_ERROR", error: error.message });
+            });
+      });
+  };
+}
+
 export function signOut() {
   return function(dispatch) {
     firebase
@@ -195,7 +229,10 @@ export function isAdmin() {
         firebaseRef.once("value").then(dataSnapshot => {
           dispatch({ type: "IS_ADMIN", isadmin: dataSnapshot.val() });
         });
-      } else dispatch({ type: "IS_NOT_ADMIN", isadmin: null });
+      } else
+        dispatch({ type: "IS_NOT_ADMIN", isadmin: null }).catch(error => {
+          dispatch({ type: "FETCH_ERROR", error: error.message });
+        });
     });
   };
 }
