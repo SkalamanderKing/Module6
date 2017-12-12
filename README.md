@@ -34,4 +34,4 @@ A blog App. User can create an account and comment and remove or updates their c
 
 😎 Learned a lot!
 
-Student: Fredrick Östlund.
+Student: Fredrick Östlund
