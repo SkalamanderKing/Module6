@@ -22,8 +22,8 @@ export default function SiteContent(props) {
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nisl
               ipsum, luctus rutrum tellus vel, mollis fringilla mauris. Nullam
-              sagittis tristique arcu, vel euismod urna elementum ac. Fusce in
-              tortor ac mauris elementum porttitor. Interdum et malesuada fames
+              sagittis tristique arcu, vel euismod urna delementum ac. Fusce in
+              tortor ac mauris elementum porttitor. Interdum et malsuada fames
               ac ante ipsum primis in
             </p>
             <form>
